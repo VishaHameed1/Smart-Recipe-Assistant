@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.hanson.android.recipe'
+    compileSdk 34 // Tip: 34 ya 35 use karein, 36 abhi experimental ho sakta hai
+
+    defaultConfig {
+        applicationId "com.hanson.android.recipe"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+
+    // ✅ YE BLOCK ADD KIYA GAYA HAI DUPLICATE ERRORS FIX KARNE KE LIYE
+    packaging {
+        resources {
+            excludes += "/META-INF/INDEX.LIST"
+            excludes += "/META-INF/DEPENDENCIES"
+            excludes += "/META-INF/LICENSE*"
+            excludes += "/META-INF/NOTICE*"
+            excludes += "/META-INF/io.netty.versions.properties"
+        }
+    }
+}
+
+dependencies {
+    // Java 8+ features support for older devices
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
+    // Gemini SDK (Recommended for Android)
+    // Dono "google-genai" aur "generativeai" ek saath use na karein.
+    // Android ke liye niche wali library best hai:
+    implementation "com.google.genai:google-genai:1.32.0"
+
+
+    // Guava for ListenableFuture support (Futures.addCallback use karne ke liye)
+    implementation "com.google.guava:guava:31.1-android"
+
+    // Jackson (Fixed version for compatibility)
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+
+    // AutoValue
+    compileOnly 'com.google.auto.value:auto-value-annotations:1.10.1'
+    annotationProcessor 'com.google.auto.value:auto-value:1.10.1'
+
+    // AndroidX Stable Libraries
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Standard Files
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

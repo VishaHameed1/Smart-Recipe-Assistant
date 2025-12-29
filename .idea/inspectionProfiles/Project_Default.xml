@@ -1,0 +1,17 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="AndroidLintBadConfigurationProvider" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintBadPeriodicWorkRequestEnqueue" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintEnsureInitializerMetadata" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintEnsureInitializerNoArgConstr" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintIdleBatteryChargingConstraints" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintInvalidPeriodicWorkRequestInterval" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintRemoveWorkManagerInitializer" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSpecifyForegroundServiceType" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintSpecifyJobSchedulerIdRange" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUseRxSetProgress2" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintWorkerHasAPublicModifier" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintWrongRequiresOptIn" enabled="true" level="ERROR" enabled_by_default="true" />
+  </profile>
+</component>

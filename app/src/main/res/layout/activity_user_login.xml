@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome Back"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent_deepBlue"
+        android:layout_marginBottom="32dp"/>
+
+    <EditText
+        android:id="@+id/et_login_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="15dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingLeft="15dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btn_login_user"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="LOGIN"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorAccent_deepBlue"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_go_to_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Register here"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent_deepBlue"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+</LinearLayout>

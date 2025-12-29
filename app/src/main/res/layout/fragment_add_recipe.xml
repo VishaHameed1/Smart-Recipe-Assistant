@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_Add_Recipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hanson.android.recipe.AddRecipeFragment"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <FrameLayout
+        android:id="@+id/fame_Add_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/imgv_Add_Image"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/txt_Add_step1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@color/colorFont1"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="4dp"
+            android:text="STEP 1"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_Add_Camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
+            app:tint="@android:color/white"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/txt_Add_NewName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/fame_Add_top"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/editborder"
+        android:hint="Recipe Title (e.g. Classic Beef Burger)"
+        android:inputType="textCapWords"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/txt_Add_Author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txt_Add_NewName"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="4dp"
+        android:text="Author Name"
+        android:textSize="12sp"
+        android:textColor="#757575" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_Add_Author"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:text="Cuisine / Country"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent_deepBlue" />
+
+    <Spinner
+        android:id="@+id/spinner_Add_Country"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/textView7"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="4dp"
+        android:entries="@array/countryName" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner_Add_Country"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="20dp"
+        android:text="Short Description"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent_deepBlue" />
+
+    <EditText
+        android:id="@+id/txt_Add_Description"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_below="@+id/textView6"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/editborder"
+        android:gravity="top"
+        android:hint="Briefly describe your dish. What makes it special? (e.g. A spicy and juicy homemade burger recipe...)"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:textSize="14sp" />
+</RelativeLayout>

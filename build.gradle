@@ -1,0 +1,17 @@
+// Top-level build file
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Use a version compatible with your Android Studio (e.g., 8.2.0)
+        classpath 'com.android.tools.build:gradle:8.13.2'
+    }
+}
+
+// DELETE the allprojects { ... } block from here!
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

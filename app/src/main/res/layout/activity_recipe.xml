@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bright_bg"
     tools:context="com.hanson.android.recipe.RecipeActivity">
 
     <ScrollView
         android:id="@+id/recipe_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:paddingBottom="80dp"
         android:clipToPadding="false">
 
@@ -19,188 +19,279 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_recipeMainImg"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:background="@color/colorFont3" />
+                android:layout_height="280dp">
 
-            <TextView
-                android:id="@+id/txt_recipeUploaddate"
+                <ImageView
+                    android:id="@+id/img_recipeMainImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/red_primary"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/image_gradient_overlay" />
+
+                <TextView
+                    android:id="@+id/txt_recipeUploaddate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/red_date_badge"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textColor="@color/bright_yellow"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="26 DEC" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-20dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="end"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                tools:text="2025-12-26" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="-40dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="@color/bright_yellow_card"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="12dp"
+                app:strokeColor="@color/red_primary"
+                app:strokeWidth="2dp">
 
-            <TextView
-                android:id="@+id/txt_recipeName"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/txt_recipeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/red_primary"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        tools:text="🍔 Classic Beef Burger" />
+
+                    <TextView
+                        android:id="@+id/txt_recipeAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:textColor="@color/dark_red"
+                        android:textSize="16sp"
+                        tools:text="👨‍🍳 by Chef Visha" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:textColor="@color/colorAccent_deepBlue"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                tools:text="Classic Beef Burger" />
+                android:layout_marginEnd="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txt_recipeAuthor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="4dp"
-                android:gravity="start"
-                android:textColor="@color/colorFont3"
-                android:textSize="14sp"
-                tools:text="by Chef Visha" />
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_location_red"
+                    app:tint="@color/red_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Cuisine"
+                    android:textColor="@color/red_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_recipeCountry"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="🇵🇰 Pakistani" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="24dp"
-                android:background="#EEEEEE" />
+                android:layout_height="2dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/red_dotted_divider" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:text="Cuisine / Country"
-                android:textColor="@color/colorFont1"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_recipeCountry"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="4dp"
-                tools:text="Pakistan" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:text="Ingredients"
-                android:textColor="@color/colorFont1"
-                android:textStyle="bold" />
+                android:layout_marginEnd="24dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txt_recipeIngredients"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📝 Ingredients"
+                    android:textColor="@color/red_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_recipeIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/ingredients_bg"
+                    android:lineSpacingMultiplier="1.4"
+                    android:padding="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="8dp"
-                android:lineSpacingMultiplier="1.4"
-                android:textColor="@color/colorAccent"
-                tools:text="Salt / Pepper / Beef" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:text="Description"
-                android:textColor="@color/colorFont1"
-                android:textStyle="bold" />
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="40dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txt_recipeDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="8dp"
-                android:lineSpacingMultiplier="1.3"
-                tools:text="A very delicious homemade burger..." />
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👨‍🍳 Cooking Steps"
+                    android:textColor="@color/red_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="24dp"
-                android:text="Instructions (Cooking Steps)"
-                android:textColor="@color/colorFont1"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/txt_recipeHowto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/steps_bg"
+                    android:lineSpacingMultiplier="1.5"
+                    android:padding="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/txt_recipeHowto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:lineSpacingMultiplier="1.5"
-                android:textSize="16sp"
-                tools:text="1. Grill the meat. 2. Toast the buns." />
-
-            <CheckBox
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/chk_recipeLike"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="120dp"
-                android:button="@null"
-                android:background="@drawable/checkbox" />
+                android:layout_height="wrap_content"
+                android:text="❤️ Save to Favorites"
+                android:textColor="@color/red_primary"
+                app:backgroundTint="@color/bright_yellow"
+                app:cornerRadius="25dp"
+                app:icon="@drawable/ic_heart_red"
+                app:iconTint="@color/red_primary" />
+
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/voice_control_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#FFFFFF"
-        android:elevation="12dp"
-        android:orientation="horizontal"
-        android:padding="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:visibility="gone"
+        app:cardBackgroundColor="@color/bright_yellow_card"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="16dp"
+        app:strokeColor="@color/red_primary"
+        app:strokeWidth="2dp"
         tools:visibility="visible">
 
-        <Button
-            android:id="@+id/btn_prev_step"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="Previous"
-            android:textAllCaps="false" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <Button
-            android:id="@+id/btn_next_step"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/colorAccent_deepBlue"
-            android:text="Next Step"
-            android:textAllCaps="false" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_voice_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="12dp"
+                android:text="Listening..."
+                android:textColor="@color/red_primary"
+                android:textSize="14sp"
+                android:textStyle="bold|italic" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_prev_step"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="⬅ Back"
+                    android:textColor="@color/red_primary"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="15dp"
+                    app:strokeColor="@color/red_primary"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_next_step"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="Next ➡"
+                    android:textColor="@color/bright_yellow"
+                    app:backgroundTint="@color/red_primary"
+                    app:cornerRadius="15dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btn_start_cooking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="80dp"
-        app:srcCompat="@android:drawable/ic_btn_speak_now"
-        app:backgroundTint="@color/colorAccent_deepBlue"
-        app:tint="@android:color/white"
-        app:elevation="6dp" />
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="100dp"
+        android:text="🔥 Start Cooking"
+        android:textColor="@color/bright_yellow"
+        app:backgroundTint="@color/red_primary"
+        app:cornerRadius="20dp"
+        app:elevation="10dp"
+        app:icon="@drawable/ic_cooking_yellow"
+        app:iconTint="@color/bright_yellow" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

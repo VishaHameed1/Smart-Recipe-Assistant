@@ -1,12 +1,91 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bright_bg"
     tools:context="com.hanson.android.recipe.CategoryFragment">
 
-    <ListView
-        android:id="@+id/listVeiw_category"
+    <!-- Red Header -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/red_primary"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_category_red"
+                app:tint="@color/bright_yellow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="🍽️ Recipe Categories"
+                android:textColor="@color/bright_yellow"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Browse by cuisine type"
+                android:textColor="#FFB74D"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Categories List -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:strokeColor="@color/bright_yellow"
+        app:strokeWidth="1dp">
+
+        <ListView
+            android:id="@+id/listVeiw_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@drawable/list_divider_yellow"
+            android:dividerHeight="1dp"
+            android:padding="12dp"
+            android:scrollbars="vertical" />
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/txt_empty_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:lineSpacingExtra="8sp"
+        android:text="🍴 No categories found\nAdd some categories to get started"
+        android:textAlignment="center"
+        android:textColor="@color/dark_red"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </FrameLayout>

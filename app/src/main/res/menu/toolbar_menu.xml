@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Search action (appears in toolbar) -->
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_yellow"
+        android:title="🔍 Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <!-- AI Generate action -->
+    <item
+        android:id="@+id/action_ai_generate"
+        android:icon="@drawable/ic_fire_ai"
+        android:title="🤖 AI Chef"
+        app:showAsAction="ifRoom" />
+
+    <!-- Favorite toggle -->
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/ic_star_red"
+        android:title="⭐ Favorite"
+        app:showAsAction="ifRoom" />
+
+    <!-- Share action -->
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_yellow"
+        android:title="📤 Share"
+        app:showAsAction="ifRoom" />
+
+    <!-- Settings (always in overflow) -->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="⚙️ Settings"
+        app:showAsAction="never" />
+
+    <!-- Additional overflow menu items -->
+    <item
+        android:id="@+id/action_help"
+        android:title="❓ Help - Feedback"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="ℹ️ About"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_rate"
+        android:title="⭐ Rate App"
+        app:showAsAction="never" />
+
+</menu>

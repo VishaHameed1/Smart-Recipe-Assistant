@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_red"
+        android:title="Home" />
+    <item
+        android:id="@+id/nav_categories"
+        android:icon="@drawable/ic_category_red"
+        android:title="Categories" />
+    <item
+        android:id="@+id/nav_ai_assistant"
+        android:icon="@drawable/ic_search_yellow"
+        android:title="AI Assistant" />
+
+</menu>

@@ -5,15 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
-
-/**
- * Created by lily on 2017-03-13.
- */
 
 public class AddIngredientAdapter extends BaseAdapter {
 
@@ -22,14 +16,17 @@ public class AddIngredientAdapter extends BaseAdapter {
     private int layout;
 
     public AddIngredientAdapter(Context context, ArrayList<String> ingredientList, int layout) {
-        this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // Context null check taaki crash na ho
+        if (context != null) {
+            this.inflater = LayoutInflater.from(context);
+        }
         this.ingredientList = ingredientList;
         this.layout = layout;
     }
 
     @Override
     public int getCount() {
-        return ingredientList.size();
+        return ingredientList != null ? ingredientList.size() : 0;
     }
 
     @Override
@@ -44,16 +41,31 @@ public class AddIngredientAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView==null){
-            convertView=inflater.inflate(layout,parent,false);
+        ViewHolder holder;
+
+        if (convertView == null) {
+            // Layout inflate karna
+            convertView = inflater.inflate(layout, parent, false);
+
+            // ViewHolder setup karna taaki baar baar findViewById na karna paray
+            holder = new ViewHolder();
+            holder.txtIngredient = convertView.findViewById(R.id.txt_ingredient);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
+        // Data set karna
         String ingredientItem = ingredientList.get(position);
+        if (ingredientItem != null && holder.txtIngredient != null) {
+            holder.txtIngredient.setText(ingredientItem);
+        }
 
-        TextView name=(TextView)convertView.findViewById(R.id.txt_ingredient);
-        name.setText(ingredientItem);
         return convertView;
     }
 
-
+    // Performance behtar karne ke liye ViewHolder use karein
+    static class ViewHolder {
+        TextView txtIngredient;
+    }
 }

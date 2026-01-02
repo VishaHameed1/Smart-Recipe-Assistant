@@ -1,4 +1,4 @@
-package com.hanson.android.recipe;
+package com.hanson.android.recipe.Model;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,9 +6,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.hanson.android.recipe.Helper.UserDBHelper;
+import com.hanson.android.recipe.R;
 
 public class UserRegisterActivity extends AppCompatActivity {
-    UserDBHelper dbHelper;
+    private UserDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +29,14 @@ public class UserRegisterActivity extends AppCompatActivity {
 
             if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (dbHelper.insertUser(name, email, pass)) {
+                Toast.makeText(this, "Account Created!", Toast.LENGTH_SHORT).show();
+                finish(); // Goes back to Login screen
             } else {
-                boolean isInserted = dbHelper.insertUser(name, email, pass);
-                if (isInserted) {
-                    Toast.makeText(this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                    finish(); // Register ke baad login screen pe wapis jayega
-                } else {
-                    Toast.makeText(this, "Email already registered!", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this, "Email is already taken", Toast.LENGTH_SHORT).show();
             }
         });
     }

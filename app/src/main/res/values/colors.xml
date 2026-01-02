@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Original App Colors -->
+    <color name="red">#FF0000</color>
+    <color name="deep_blue_neon">#0066FF</color>
+    <color name="card_white">#F8F9FA</color>
+    <color name="glass_white">#E6FFFFFF</color> <!-- Semi-transparent white -->
+    <color name="transparent">#00000000</color>
+
+    <color name="dark_gray">#2D3436</color>
+    <color name="medium_gray">#636E72</color>
+
+    <color name="light_red">#FFE8E8</color>
     <color name="colorPrimary">#f06373</color>
     <color name="colorPrimaryDark">#cc4053</color>
     <color name="colorAccent">#3ad0d8</color>
@@ -12,5 +24,72 @@
     <color name="colorBorder">#eaeaea</color>
     <color name="colorFragmentBG">#454546</color>
     <color name="grey">#d2cece</color>
-    <color name="white">#fffefe</color>
+    <color name="original_white">#fffefe</color> <!-- Renamed to avoid conflict -->
+
+    <!-- Vibrant Red & Yellow Theme -->
+    <color name="bright_bg">#FFF8E1</color>
+    <color name="light_yellow_bg">#FFFDE7</color>
+    <color name="bright_yellow_card">#FFEB3B</color>
+    <color name="red_primary">#F44336</color>
+    <color name="bright_red">#FF5252</color>
+    <color name="bright_yellow">#FFEB3B</color>
+    <color name="vibrant_blue">#2196F3</color>
+    <color name="contrast_purple">#9C27B0</color>
+
+    <!-- White & Black Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Red Colors -->
+    <color name="dark_red">#C62828</color>
+
+    <!-- Gradient colors -->
+    <color name="red_gradient_start">#F44336</color>
+    <color name="red_gradient_mid">#FF5252</color>
+    <color name="red_gradient_end">#D32F2F</color>
+
+    <!-- AI Assistant Colors -->
+    <color name="ai_header_gradient">#6671A3</color>
+    <color name="ai_gradient_start">#6671A3</color>
+    <color name="ai_gradient_end">#8E97C6</color>
+    <color name="ai_icon_bg_color">#4A5699</color>
+
+    <!-- Admin Colors -->
+    <color name="admin_red_dark">#D32F2F</color>
+    <color name="admin_red_primary">#F44336</color>
+    <color name="admin_red_bright">#FF5252</color>
+    <color name="admin_yellow_bright">#FFEB3B</color>
+    <color name="admin_yellow_card">#FFF9C4</color>
+    <color name="admin_orange">#FF9800</color>
+    <color name="admin_black">#212121</color>
+    <color name="admin_stroke">#F44336</color>
+
+    <!-- Black Color Shades -->
+    <color name="black_primary">#212121</color>
+    <color name="black_secondary">#424242</color>
+    <color name="black_light">#616161</color>
+    <color name="black_dark">#000000</color>
+    <color name="jet_black">#0A0A0A</color>
+    <color name="charcoal">#36454F</color>
+    <color name="onyx">#353839</color>
+    <color name="ebony">#555D50</color>
+
+    <!-- Yellow Color Shades -->
+    <color name="bright_yellow_vibrant">#FFEB3B</color>
+    <color name="bright_yellow_light">#FFF59D</color>
+    <color name="bright_yellow_medium">#FFEE58</color>
+    <color name="bright_yellow_dark">#FDD835</color>
+
+    <!-- Navigation Drawer Colors -->
+    <color name="nav_selected_bg">#FFEB3B</color>
+    <color name="nav_selected_text">#F44336</color>
+    <color name="nav_normal_text">#FFFFFF</color>
+    <color name="nav_header_bg">#F44336</color>
+
+    <!-- Additional Colors -->
+    <color name="golden_yellow">#FFD600</color>
+    <color name="light_blue">#03A9F4</color>
+    <color name="dark_purple">#7B1FA2</color>
+    <color name="light_gray_border">#E0E0E0</color>
+
 </resources>

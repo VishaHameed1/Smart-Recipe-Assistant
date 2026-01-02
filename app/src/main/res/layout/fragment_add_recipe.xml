@@ -6,126 +6,250 @@
     android:id="@+id/root_Add_Recipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hanson.android.recipe.AddRecipeFragment"
+    android:background="@color/bright_bg"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context="com.hanson.android.recipe.AddRecipeFragment">
 
+    <!-- Red Header -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/header_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/red_primary"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_add_recipe_red"
+                app:tint="@color/bright_yellow" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👨‍🍳 Add New Recipe"
+                    android:textColor="@color/bright_yellow"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Step 1: Basic Information"
+                    android:textColor="#FFB74D"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_Add_step1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/yellow_badge_bg"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="📝 STEP 1"
+                android:textColor="@color/red_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Image Upload Section -->
     <FrameLayout
         android:id="@+id/fame_Add_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_height="220dp"
+        android:layout_below="@id/header_card"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="20dp">
 
         <ImageView
             android:id="@+id/imgv_Add_Image"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="#EEEEEE"
+            android:layout_height="match_parent"
+            android:background="@color/red_primary"
+            android:contentDescription="Recipe image"
+            android:foreground="@drawable/image_placeholder_overlay"
             android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/txt_Add_step1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:background="@color/colorFont1"
-            android:gravity="center"
-            android:paddingBottom="4dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingTop="4dp"
-            android:text="STEP 1"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_Add_Camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginEnd="24dp"
-            app:tint="@android:color/white"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
+            android:layout_margin="16dp"
+            android:contentDescription="Add photo"
+            app:backgroundTint="@color/red_primary"
+            app:elevation="12dp"
+            app:srcCompat="@drawable/ic_camera_yellow"
+            app:tint="@color/bright_yellow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="📸 Tap to add photo"
+            android:textColor="@color/bright_yellow"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/txt_Add_NewName"
+    <!-- Recipe Title -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/title_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/fame_Add_top"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/editborder"
-        android:hint="Recipe Title (e.g. Classic Beef Burger)"
-        android:inputType="textCapWords"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fame_Add_top"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:boxStrokeColor="@color/red_primary"
+        app:hintTextColor="@color/red_primary"
+        app:startIconDrawable="@drawable/ic_title_red"
+        app:startIconTint="@color/red_primary">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_Add_NewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Recipe Title (e.g. Classic Beef Burger)"
+            android:inputType="textCapWords"
+            android:textColor="@color/black"
+            android:textColorHint="#99000000"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Author -->
     <TextView
         android:id="@+id/txt_Add_Author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/txt_Add_NewName"
-        android:layout_marginRight="24dp"
+        android:layout_below="@id/title_container"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="4dp"
-        android:text="Author Name"
-        android:textSize="12sp"
-        android:textColor="#757575" />
+        android:text="👨‍🍳 by Chef Visha"
+        android:textColor="@color/dark_red"
+        android:textSize="13sp" />
 
+    <!-- Cuisine Section -->
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_Add_Author"
-        android:layout_marginLeft="24dp"
+        android:layout_below="@id/txt_Add_Author"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:text="Cuisine / Country"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent_deepBlue" />
+        android:layout_marginTop="20dp"
+        android:text="🌍 Cuisine / Country"
+        android:textColor="@color/red_primary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinner_Add_Country"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/textView7"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="4dp"
-        android:entries="@array/countryName" />
-
-    <TextView
-        android:id="@+id/textView6"
+    <!-- Country Spinner -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner_Add_Country"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="20dp"
-        android:text="Short Description"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent_deepBlue" />
+        android:layout_below="@id/textView7"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:strokeColor="@color/bright_yellow"
+        app:strokeWidth="1dp">
 
-    <EditText
-        android:id="@+id/txt_Add_Description"
+        <Spinner
+            android:id="@+id/spinner_Add_Country"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:entries="@array/countryName"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Description Section -->
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_Add_Country"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="📝 Short Description"
+        android:textColor="@color/red_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="NotSibling" />
+
+    <!-- Description Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_below="@+id/textView6"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/editborder"
-        android:gravity="top"
-        android:hint="Briefly describe your dish. What makes it special? (e.g. A spicy and juicy homemade burger recipe...)"
-        android:inputType="textMultiLine"
-        android:padding="12dp"
-        android:textSize="14sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView6"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:boxStrokeColor="@color/red_primary"
+        app:hintTextColor="@color/red_primary"
+        app:startIconDrawable="@drawable/ic_description_red"
+        app:startIconTint="@color/red_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_Add_Description"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="top"
+            android:hint="Briefly describe your dish. What makes it special?"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:textColor="@color/black"
+            android:textColorHint="#99000000"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Next Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next_step"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="24dp"
+        android:elevation="10dp"
+        android:text="➡️ NEXT: ADD INGREDIENTS"
+        android:textColor="@color/bright_yellow"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/red_primary"
+        app:cornerRadius="15dp"
+        app:icon="@drawable/ic_arrow_forward_yellow"
+        app:iconGravity="textEnd"
+        app:iconPadding="12dp"
+        app:iconTint="@color/bright_yellow"
+        app:rippleColor="@color/bright_red" />
+
 </RelativeLayout>

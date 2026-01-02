@@ -8,17 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hanson.android.recipe.Helper.DBHelper;
 import com.hanson.android.recipe.Helper.ImageHelper;
 import com.hanson.android.recipe.Model.CategoryItem;
 
 import java.util.ArrayList;
 
-/**
- * Created by Pyosnag on 2017. 3. 16..
- */
-
-public class category_adapter extends BaseAdapter{
+public class category_adapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<CategoryItem> categoryList;
@@ -26,19 +21,19 @@ public class category_adapter extends BaseAdapter{
     private ImageHelper imageHelper = new ImageHelper();
 
     public category_adapter(Context context, ArrayList<CategoryItem> categoryList, int layout) {
-        this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = LayoutInflater.from(context);
         this.categoryList = categoryList;
         this.layout = layout;
     }
 
     @Override
     public int getCount() {
-        return categoryList.size();
+        return (categoryList != null) ? categoryList.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return categoryList.get(position).get_category();
+        return categoryList.get(position);
     }
 
     @Override
@@ -48,15 +43,38 @@ public class category_adapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView==null){
-            convertView=inflater.inflate(layout,parent,false);
-        }
-        CategoryItem categoryItem = categoryList.get(position);
-        ImageView icon=(ImageView)convertView.findViewById(R.id.categoryitem_img);
-        icon.setImageBitmap(imageHelper.getBitmapFromByteArray(categoryItem.get_mainImg()));
+        ViewHolder holder;
 
-        TextView name = (TextView)convertView.findViewById(R.id.categoryitem_text);
-        name.setText(categoryItem.get_category());
+        if (convertView == null) {
+            convertView = inflater.inflate(layout, parent, false);
+            holder = new ViewHolder();
+            holder.icon = convertView.findViewById(R.id.categoryitem_img);
+            holder.name = convertView.findViewById(R.id.categoryitem_text);
+            holder.count = convertView.findViewById(R.id.categoryitem_count);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        CategoryItem categoryItem = categoryList.get(position);
+
+        // Data binding
+        if (categoryItem.get_mainImg() != null) {
+            holder.icon.setImageBitmap(imageHelper.getBitmapFromByteArray(categoryItem.get_mainImg()));
+        }
+
+        holder.name.setText(categoryItem.get_category());
+
+        // Note: Agar aapne model mein count nahi rakha toh ise hide ya static kar sakte hain
+        // holder.count.setText("🍽️ 15 Recipes");
+
         return convertView;
+    }
+
+    // Performance ke liye ViewHolder
+    static class ViewHolder {
+        ImageView icon;
+        TextView name;
+        TextView count; // New field from your XML
     }
 }

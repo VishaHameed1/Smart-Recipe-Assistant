@@ -2,16 +2,10 @@ package com.hanson.android.recipe;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,19 +28,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-
     private Button btn_addNewRecipe;
-    private EditText newName;
-    private TextView newAuthor;
-    private Spinner newCounty;
-    private ImageView newMainImg;
-    private EditText newDescription;
-    private ListView newIngredientList;
-    private EditText newHowto;
-
     private ImageView navi1, navi2, navi3;
-
-    ImageHelper imageHelper = new ImageHelper();
+    private ImageHelper imageHelper = new ImageHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +43,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle("Add New Recipe");
         }
 
         navi1 = findViewById(R.id.imgv_Add_navi1);
@@ -74,129 +58,88 @@ public class AddRecipeActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.container);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-
+            public void onPageScrolled(int pos, float offset, int offsetPx) {
+            }
             @Override
             public void onPageSelected(int position) {
                 updateNavigationDots(position);
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
 
         btn_addNewRecipe = findViewById(R.id.btn_Add_recipeAdd);
-        btn_addNewRecipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                performSave(v);
-            }
-        });
+        btn_addNewRecipe.setOnClickListener(v -> performSave());
     }
 
     private void updateNavigationDots(int position) {
-        navi1.setImageDrawable(ContextCompat.getDrawable(this, position == 0 ? R.drawable.greenbutton : R.drawable.graybackground));
-        navi2.setImageDrawable(ContextCompat.getDrawable(this, position == 1 ? R.drawable.greenbutton : R.drawable.graybackground));
-        navi3.setImageDrawable(ContextCompat.getDrawable(this, position == 2 ? R.drawable.greenbutton : R.drawable.graybackground));
+        navi1.setColorFilter(ContextCompat.getColor(this, position == 0 ? R.color.red_primary : R.color.medium_gray));
+        navi2.setColorFilter(ContextCompat.getColor(this, position == 1 ? R.color.red_primary : R.color.medium_gray));
+        navi3.setColorFilter(ContextCompat.getColor(this, position == 2 ? R.color.red_primary : R.color.medium_gray));
     }
 
-    private void performSave(View v) {
-        // Initialize views
-        newMainImg = findViewById(R.id.imgv_Add_Image);
-        newName = findViewById(R.id.txt_Add_NewName);
-        newAuthor = findViewById(R.id.txt_Add_Author);
-        newCounty = findViewById(R.id.spinner_Add_Country);
-        newDescription = findViewById(R.id.txt_Add_Description);
-        newIngredientList = findViewById(R.id.ListView_Add_Ingredient);
-        newHowto = findViewById(R.id.txt_ADD_Howto);
+    private void performSave() {
+        // Fragments ke instance lein
+        AddRecipeFragment step1 = (AddRecipeFragment) mSectionsPagerAdapter.getItem(0);
+        AddIngredientFragment step2 = (AddIngredientFragment) mSectionsPagerAdapter.getItem(1);
+        AddHowtoFragment step3 = (AddHowtoFragment) mSectionsPagerAdapter.getItem(2);
 
-        byte[] makeMainImg;
-        byte[] makeThumbnail;
-        String makeRecipeName;
-        String makeDescription;
-        String makeAuthor;
-        String makeCategory;
-        String makeHowto;
-        Date today = new Date();
-        ArrayList<String> makeIndeList = new ArrayList<>();
+        try {
+            // Data Extract karna (Ye methods niche fragments mein add kiye gaye hain)
+            String name = step1.getRecipeName();
+            String category = step1.getCategory();
+            String desc = step1.getDescription();
+            Bitmap bitmap = step1.getRecipeImage();
+            ArrayList<String> ingredients = step2.getIngredientList();
+            String howto = step3.getHowToText();
 
-        // Image Validation
-        if (newMainImg != null && newMainImg.getDrawable() != null) {
-            BitmapDrawable d = (BitmapDrawable) newMainImg.getDrawable();
-            Bitmap bitmap = d.getBitmap();
-            Bitmap thBitmap = imageHelper.getThubmail(bitmap);
-            makeMainImg = imageHelper.getByteArrayFromBitmap(bitmap);
-            makeThumbnail = imageHelper.getByteArrayFromBitmap(thBitmap);
-        } else {
-            Toast.makeText(v.getContext(), "Please, pick your picture!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Name Validation
-        if (newName != null && newName.getText() != null && !newName.getText().toString().isEmpty()) {
-            makeRecipeName = newName.getText().toString();
-        } else {
-            Toast.makeText(v.getContext(), "Please, input new recipe name!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        makeAuthor = (newAuthor != null) ? newAuthor.getText().toString() : "Unknown";
-
-        // Category Validation
-        if (newCounty != null && newCounty.getSelectedItem() != null) {
-            makeCategory = newCounty.getSelectedItem().toString();
-        } else {
-            Toast.makeText(v.getContext(), "Please, select the Country!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Description Validation
-        if (newDescription != null && newDescription.getText() != null && !newDescription.getText().toString().isEmpty()) {
-            makeDescription = newDescription.getText().toString();
-        } else {
-            Toast.makeText(v.getContext(), "Please, input new description!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Ingredients Validation
-        if (newIngredientList != null && newIngredientList.getCount() > 0) {
-            for (int i = 0; i < newIngredientList.getCount(); i++) {
-                makeIndeList.add(newIngredientList.getItemAtPosition(i).toString());
+            // Validations
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Enter Recipe Name!", Toast.LENGTH_SHORT).show();
+                return;
             }
-        } else {
-            Toast.makeText(v.getContext(), "Please, input your ingredients!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // HowTo Validation
-        if (newHowto != null && newHowto.getText() != null && !newHowto.getText().toString().isEmpty()) {
-            makeHowto = newHowto.getText().toString();
-        } else {
-            Toast.makeText(v.getContext(), "Please, input how to cook this recipe!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Database Insertion
-        DBHelper dbHelper = new DBHelper(v.getContext(), "Recipes.db", null, 1);
-        dbHelper.recipes_Insert(makeCategory, makeRecipeName, makeAuthor, today.toString(),
-                makeHowto, makeDescription, makeThumbnail, makeMainImg, 0);
-
-        int makeRecipeid = dbHelper.recipes_GetIdByName(makeRecipeName);
-        if (makeRecipeid != -1) {
-            for (int i = 0; i < makeIndeList.size(); i++) {
-                dbHelper.ingredients_Insert(makeRecipeid, makeIndeList.get(i));
+            if (bitmap == null) {
+                Toast.makeText(this, "Select a Picture!", Toast.LENGTH_SHORT).show();
+                return;
             }
-            Toast.makeText(v.getContext(), "Completed to add your recipe!!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(v.getContext(), MainActivity.class);
-            startActivity(intent);
-            finish(); // Close this activity
-        } else {
-            Toast.makeText(v.getContext(), "Upload Failed ", Toast.LENGTH_SHORT).show();
+            if (ingredients.isEmpty()) {
+                Toast.makeText(this, "Add at least one Ingredient!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (howto.isEmpty()) {
+                Toast.makeText(this, "Enter Cooking Steps!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // DB Process
+            byte[] mainImg = imageHelper.getByteArrayFromBitmap(bitmap);
+            byte[] thumbImg = imageHelper.getByteArrayFromBitmap(imageHelper.getThubmail(bitmap));
+
+            DBHelper dbHelper = new DBHelper(this, "Recipes.db", null, 1);
+            dbHelper.recipes_Insert(category, name, "Chef", new Date().toString(), howto, desc, thumbImg, mainImg, 0);
+
+            int recipeId = dbHelper.recipes_GetIdByName(name);
+            for (String ing : ingredients) {
+                dbHelper.ingredients_Insert(recipeId, ing);
+            }
+
+            Toast.makeText(this, "Recipe Saved!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Save Failed. Check all steps.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    public void moveToNextStep(int index) {
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(index);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -213,14 +156,13 @@ public class AddRecipeActivity extends AppCompatActivity {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
-        public void add(Fragment fragment) {
-            _fragments.add(fragment);
+        public void add(Fragment f) {
+            _fragments.add(f);
         }
 
-        @NonNull
         @Override
-        public Fragment getItem(int position) {
-            return _fragments.get(position);
+        public Fragment getItem(int pos) {
+            return _fragments.get(pos);
         }
 
         @Override

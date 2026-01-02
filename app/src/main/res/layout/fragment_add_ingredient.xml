@@ -5,87 +5,162 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/admin_red_gradient_bg"
     tools:context="com.hanson.android.recipe.AddIngredientFragment">
 
-    <TextView
-        android:id="@+id/txt_Add_step2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorFont1"
-        android:gravity="center"
-        android:paddingBottom="2dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="2dp"
-        android:text="STEP 2 "
-        android:textColor="@android:color/white"
-        android:textSize="17sp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView8"
+    <!-- Glass Morphism Card for Title -->
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Ingredients List"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent_deepBlue"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:cardBackgroundColor="@color/glass_white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.02"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="12dp"
+            android:text="📝 Ingredients List"
+            android:textColor="@color/deep_blue_neon"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Modern Input Card with gradient border -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/inputCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8">
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="20dp"
+        app:cardBackgroundColor="@color/card_white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        tools:ignore="NotSibling">
 
-        <EditText
-            android:id="@+id/txt_Add_IngredientAdd"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:background="@drawable/editborder"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_border_card"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-            android:hint="Enter ingredient (e.g. 2 cups of flour)"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
-            android:inputType="text"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/txt_Add_IngredientAdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@null"
+                    android:drawableStart="@drawable/ic_ingredient"
+                    android:drawablePadding="8dp"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="✨ Enter ingredient (e.g. 2 cups of flour)"
+                    android:textColor="@color/dark_gray"
+                    android:textColorHint="@color/medium_gray"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/btn_Add_IngredientAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:background="@drawable/greenbutton"
-            android:text="Add Item"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+            <!-- Gradient Add Button -->
+            <Button
+                android:id="@+id/btn_Add_IngredientAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/red_button"
+                android:elevation="4dp"
+                android:letterSpacing="0.05"
+                android:paddingHorizontal="24dp"
+                android:stateListAnimator="@null"
+                android:text="➕ ADD"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/ListView_Add_Ingredient"
+            <!-- STEP 2 Badge -->
+            <TextView
+                android:id="@+id/txt_Add_step2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/image_gradient_overlay"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:letterSpacing="0.05"
+                android:minWidth="100dp"
+                android:outlineAmbientShadowColor="@color/dark_red"
+                android:outlineSpotShadowColor="@color/dark_red"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:text="STEP 2️⃣"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Modern List Container with Glass Morphism -->
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardBackgroundColor="@color/glass_white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputCard">
+
+        <ListView
+            android:id="@+id/ListView_Add_Ingredient"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/about_gradient_bg"
+            android:clipToPadding="false"
+            android:divider="@drawable/gradient_divider"
+            android:dividerHeight="1dp"
+            android:fadingEdgeLength="24dp"
+            android:padding="4dp"
+            android:requiresFadingEdge="vertical" />
+
+        <!-- Empty State View -->
+        <TextView
+            android:id="@+id/emptyStateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_empty_list"
+            android:drawablePadding="12dp"
+            android:gravity="center"
+            android:text="📭 No ingredients added yet\n\n👉 Start by adding your first ingredient above!"
+            android:textColor="@color/medium_gray"
+            android:textSize="16sp"
+            android:visibility="gone" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

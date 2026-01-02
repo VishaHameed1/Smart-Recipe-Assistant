@@ -3,26 +3,22 @@ package com.hanson.android.recipe;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
-
-// CORRECT ANDROIDX IMPORTS
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.hanson.android.recipe.Helper.DBHelper;
 import com.hanson.android.recipe.Model.RecipeItem;
-
 import java.util.ArrayList;
 
 public class RecipeListActivity extends AppCompatActivity {
 
     private ArrayList<RecipeItem> recipes = new ArrayList<>();
-    private TextView txtTitle;
-    private ListView listView;
+    private TextView txtTitle, txtRecipeCount;
+    private RecyclerView recyclerView;
+    private RecipeRecyclerAdapter adapter; // Naya Adapter
     private DBHelper dbHelper;
 
     @Override
@@ -30,19 +26,26 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        // Setup ActionBar with back button
+        // 1. Setup ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle(""); // Custom title layout mein handle ho raha hai
         }
 
-        // Initialize UI elements in onCreate (Best Practice)
+        // 2. Initialize Views
         txtTitle = findViewById(R.id.txt_recipeListTitle);
-        listView = findViewById(R.id.listview_recipelist);
+        txtRecipeCount = findViewById(R.id.txt_recipeCount);
+        recyclerView = findViewById(R.id.listview_recipelist);
 
-        // Initialize Database Helper
+        // 3. Setup RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         dbHelper = new DBHelper(this, "Recipes.db", null, 1);
+
+        // 4. FAB Logic (Optional: Add Recipe)
+        findViewById(R.id.fab_add_recipe).setOnClickListener(v -> {
+            // Toast.makeText(this, "Add Recipe Clicked", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -53,46 +56,35 @@ public class RecipeListActivity extends AppCompatActivity {
 
     private void refreshList() {
         recipes.clear();
-        String title = "";
-
         Intent intent = getIntent();
 
-        // Handle Category Filtering
         if (intent.hasExtra("category")) {
-            title = intent.getStringExtra("category");
-            txtTitle.setText(title);
-            recipes = dbHelper.recipes_SelectByCategory(title);
+            String category = intent.getStringExtra("category");
+            txtTitle.setText("🍳 " + category);
+            recipes = dbHelper.recipes_SelectByCategory(category);
         }
-        // Handle Search Results Filtering
         else if (intent.hasExtra("title")) {
-            title = intent.getStringExtra("title");
-            txtTitle.setText(title);
-
-            ArrayList<Integer> receivedRecipeIds = intent.getIntegerArrayListExtra("list");
-            if (receivedRecipeIds != null) {
-                for (Integer id : receivedRecipeIds) {
-                    RecipeItem getRecipe = dbHelper.recipes_SelectById(id);
-                    if (getRecipe != null) {
-                        recipes.add(getRecipe);
-                    }
+            String searchTitle = intent.getStringExtra("title");
+            txtTitle.setText("🔍 " + searchTitle);
+            ArrayList<Integer> ids = intent.getIntegerArrayListExtra("list");
+            if (ids != null) {
+                for (Integer id : ids) {
+                    RecipeItem r = dbHelper.recipes_SelectById(id);
+                    if (r != null) recipes.add(r);
                 }
             }
         }
 
-        // Set the Adapter with Data
-        RecipeList_Adapter adapter = new RecipeList_Adapter(this, recipes, R.layout.activity_recipe_list_item);
-        listView.setAdapter(adapter);
+        // Recipe Count Update
+        txtRecipeCount.setText(recipes.size() + " Recipes Found");
 
-        // Set Click Listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                RecipeItem selectRecipe = recipes.get(position);
-                Intent recipeIntent = new Intent(RecipeListActivity.this, RecipeActivity.class);
-                recipeIntent.putExtra("recipe", selectRecipe.get_recipeName());
-                startActivity(recipeIntent);
-            }
+        // 5. Set Adapter (Interface implementation for click)
+        adapter = new RecipeRecyclerAdapter(this, recipes, item -> {
+            Intent recipeIntent = new Intent(RecipeListActivity.this, RecipeActivity.class);
+            recipeIntent.putExtra("recipe", item.get_recipeName());
+            startActivity(recipeIntent);
         });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

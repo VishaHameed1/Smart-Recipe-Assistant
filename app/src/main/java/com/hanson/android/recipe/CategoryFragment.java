@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-// CORRECTED ANDROIDX IMPORTS
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.hanson.android.recipe.Helper.DBHelper;
@@ -21,38 +19,38 @@ import java.util.ArrayList;
 public class CategoryFragment extends Fragment {
 
     public CategoryFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_category, container, false);
 
         ListView listView = view.findViewById(R.id.listVeiw_category);
+        TextView emptyText = view.findViewById(R.id.txt_empty_categories);
 
-        // Initialize Database Helper
+        // Database logic
         DBHelper dbHelper = new DBHelper(requireContext(), "Recipes.db", null, 1);
-
-        // Fetch category list
         final ArrayList<CategoryItem> categoryList = dbHelper.recipes_SelectCategory();
 
-        // Set the adapter
-        // Note: Ensure your 'category_adapter' class imports are also updated to AndroidX
-        listView.setAdapter(new category_adapter(requireContext(), categoryList, R.layout.fragment_category_item));
+        // Check if data exists
+        if (categoryList == null || categoryList.isEmpty()) {
+            listView.setVisibility(View.GONE);
+            emptyText.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+            emptyText.setVisibility(View.GONE);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CategoryItem selectCategory = categoryList.get(position);
+            listView.setAdapter(new category_adapter(requireContext(), categoryList, R.layout.fragment_category_item));
+        }
 
-                // Navigate to RecipeListActivity with selected category
-                Intent intent = new Intent(requireActivity(), RecipeListActivity.class);
-                intent.putExtra("category", selectCategory.get_category());
-                startActivity(intent);
-            }
+        // On Click Listener
+        listView.setOnItemClickListener((parent, v, position, id) -> {
+            CategoryItem selectCategory = categoryList.get(position);
+            Intent intent = new Intent(requireActivity(), RecipeListActivity.class);
+            intent.putExtra("category", selectCategory.get_category());
+            startActivity(intent);
         });
 
         return view;

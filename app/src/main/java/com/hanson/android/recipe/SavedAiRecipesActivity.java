@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class SavedAiRecipesActivity extends AppCompatActivity {
 
     ListView listView;
-    ArrayList<String> recipeFiles; // Asli file names (.txt ke saath)
-    ArrayList<String> displayNames; // User ko dikhane ke liye (Names without underscores)
+    ArrayList<String> recipeFiles;
+    ArrayList<String> displayNames;
     ArrayAdapter<String> adapter;
 
     @Override
@@ -26,24 +26,26 @@ public class SavedAiRecipesActivity extends AppCompatActivity {
         recipeFiles = new ArrayList<>();
         displayNames = new ArrayList<>();
 
-        loadSavedFiles();
-
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayNames);
         listView.setAdapter(adapter);
 
-        // Click to View
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedFileName = recipeFiles.get(position); // Full file name
+            String selectedFile = recipeFiles.get(position);
             Intent intent = new Intent(this, ViewSavedRecipeActivity.class);
-            intent.putExtra("FILE_NAME", selectedFileName);
+            intent.putExtra("FILE_NAME", selectedFile + ".txt"); // Full extension ke saath bhejein
             startActivity(intent);
         });
 
-        // Long Click to Delete
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             showDeleteDialog(position);
             return true;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSavedFiles(); // Screen par wapas aate hi list refresh hogi
     }
 
     private void loadSavedFiles() {
@@ -56,28 +58,23 @@ public class SavedAiRecipesActivity extends AppCompatActivity {
             for (File file : files) {
                 if (file.getName().endsWith(".txt")) {
                     String rawName = file.getName().replace(".txt", "");
-                    recipeFiles.add(rawName); // Save raw name for logic
-
-                    // Display name: Underscores hata kar spaces lagayein
+                    recipeFiles.add(rawName);
                     displayNames.add(rawName.replace("_", " "));
                 }
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void showDeleteDialog(int position) {
         String rawName = recipeFiles.get(position);
-        String displayName = displayNames.get(position);
-
         new AlertDialog.Builder(this)
                 .setTitle("Delete Recipe")
-                .setMessage("Delete '" + displayName + "'?")
+                .setMessage("Kya aap '" + displayNames.get(position) + "' ko delete karna chahte hain?")
                 .setPositiveButton("Delete", (dialog, which) -> {
                     File file = new File(getFilesDir(), rawName + ".txt");
                     if (file.delete()) {
-                        recipeFiles.remove(position);
-                        displayNames.remove(position);
-                        adapter.notifyDataSetChanged();
+                        loadSavedFiles();
                         Toast.makeText(this, "Deleted!", Toast.LENGTH_SHORT).show();
                     }
                 })

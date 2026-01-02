@@ -4,26 +4,199 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bright_bg"
     tools:context="com.hanson.android.recipe.SearchResult">
 
-    <TextView
-        android:id="@+id/idTextViewSearchResult"
-        android:layout_width="wrap_content"
+    <!-- Red Search Header -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_header"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Search Result"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/red_primary"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp">
 
-    <GridView
-        android:id="@+id/idGridSearchResult"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_search_red"
+                app:tint="@color/bright_yellow" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/idTextViewSearchResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔍 Search Results"
+                    android:textColor="@color/bright_yellow"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_search_query"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="for 'chicken recipes'"
+                    android:textColor="#FFB74D"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_result_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/yellow_badge_bg"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="12 results"
+                android:textColor="@color/red_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Filters Row -->
+    <LinearLayout
+        android:id="@+id/filters_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_header"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🍗 Chicken"
+            android:textColor="@color/red_primary"
+            app:chipBackgroundColor="@color/bright_yellow"
+            app:chipStrokeColor="@color/red_primary"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="⏱️ Under 30 min"
+            android:textColor="@color/red_primary"
+            app:chipBackgroundColor="@color/bright_yellow"
+            app:chipStrokeColor="@color/red_primary"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="🔥 Easy"
+            android:textColor="@color/red_primary"
+            app:chipBackgroundColor="@color/bright_yellow"
+            app:chipStrokeColor="@color/red_primary"
+            app:chipStrokeWidth="1dp" />
+
+        <ImageView
+            android:id="@+id/btn_filter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/red_circle_bg"
+            android:padding="8dp"
+            android:src="@drawable/ic_filter"
+            app:tint="@color/bright_yellow" />
+    </LinearLayout>
+
+    <!-- Search Results Grid -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/idTextViewSearchResult"
-        android:columnWidth="100dp"
-        android:numColumns="auto_fit"
-        android:padding="10dp" />
+        android:layout_below="@id/filters_container"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp">
+
+        <GridView
+            android:id="@+id/idGridSearchResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:columnWidth="180dp"
+            android:gravity="center"
+            android:horizontalSpacing="12dp"
+            android:numColumns="2"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:stretchMode="spacingWidthUniform"
+            android:verticalSpacing="12dp" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- No Results View -->
+    <LinearLayout
+        android:id="@+id/no_results_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filters_container"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_no_results"
+            app:tint="@color/red_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="No Recipes Found"
+            android:textColor="@color/red_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Try different keywords or check your spelling"
+            android:textColor="@color/dark_red"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Try Again"
+            android:textColor="@color/bright_yellow"
+            app:backgroundTint="@color/red_primary"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/ic_refresh"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@color/bright_yellow" />
+    </LinearLayout>
 
 </RelativeLayout>

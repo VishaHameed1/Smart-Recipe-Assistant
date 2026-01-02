@@ -1,27 +1,133 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/bright_bg"
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
 
-    <TextView
-        android:id="@+id/txt_recipeListTitle"
+    <!-- Vibrant Red Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:minHeight="20dp"
-        android:text="TextView"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:fontFamily="@string/title_activity_recipy"/>
+        android:background="@drawable/red_gradient_header"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
 
-    <ListView
+        <TextView
+            android:id="@+id/txt_recipeListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:letterSpacing="0.05"
+            android:shadowColor="@color/dark_red"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="🍳 My Recipes"
+            android:textColor="@color/bright_yellow"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="Delicious creations waiting for you!"
+            android:textColor="#FFB74D"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Recipe Count Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-20dp"
+        android:layout_marginEnd="20dp"
+        app:cardBackgroundColor="@color/bright_yellow_card"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp"
+        app:strokeColor="@color/red_primary"
+        app:strokeWidth="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_recipe_count"
+                app:tint="@color/red_primary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_recipeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12 Recipes"
+                    android:textColor="@color/red_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Tap to explore delicious dishes"
+                    android:textColor="@color/dark_red"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_forward_yellow"
+                app:tint="@color/red_primary" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- RecyclerView for Modern List -->
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listview_recipelist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:choiceMode="singleChoice"
-        android:divider="#a7a6ab"
-        android:dividerHeight="1dp" />
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <!-- Add Recipe FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="Add New Recipe"
+        app:backgroundTint="@color/red_primary"
+        app:elevation="12dp"
+        app:rippleColor="@color/bright_red"
+        app:srcCompat="@drawable/ic_add_recipe"
+        app:tint="@color/bright_yellow" />
+
 </LinearLayout>

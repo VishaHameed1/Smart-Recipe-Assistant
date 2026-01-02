@@ -6,84 +6,74 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-// CORRECTED ANDROIDX IMPORTS
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
 public class AddIngredientFragment extends Fragment {
+    private TextView emptyStateView;
 
     private EditText txt_ingredient;
     private ListView list_ingredient;
     private Button btn_ingredient;
+    private InputMethodManager imm;
     private ArrayList<String> ingredientList;
     private AddIngredientAdapter adapter;
-    private InputMethodManager inputMethodManager;
+
+    // AddIngredientFragment ke andar ye method zaroor rakhen
+    public ArrayList<String> getIngredientList() {
+        return ingredientList != null ? ingredientList : new ArrayList<>();
+    }
 
     public AddIngredientFragment() {
-        // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_add_ingredient, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_add_ingredient, container, false);
 
-        // setRetainInstance(true) is deprecated in AndroidX.
-        // Fragments are now retained automatically by the FragmentManager.
-
-        // Initialize keyboard manager safely
-        if (getActivity() != null) {
-            inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        }
-
+        // IDs Initialization
         btn_ingredient = view.findViewById(R.id.btn_Add_IngredientAdd);
         txt_ingredient = view.findViewById(R.id.txt_Add_IngredientAdd);
         list_ingredient = view.findViewById(R.id.ListView_Add_Ingredient);
+        emptyStateView = view.findViewById(R.id.emptyStateView);
+
+        if (getActivity() != null) {
+            imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        }
 
         ingredientList = new ArrayList<>();
-
-        // Initialize the adapter once
+        // Adapter setup
         adapter = new AddIngredientAdapter(requireContext(), ingredientList, R.layout.fragment_add_ingredientitem);
         list_ingredient.setAdapter(adapter);
+        list_ingredient.setEmptyView(emptyStateView);
 
-        btn_ingredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = txt_ingredient.getText().toString().trim();
-                if (input.length() > 0) {
-                    ingredientList.add(input);
-                    txt_ingredient.setText("");
-
-                    // Refresh the list efficiently
-                    adapter.notifyDataSetChanged();
-
-                    // Hide keyboard
-                    if (inputMethodManager != null && txt_ingredient.getWindowToken() != null) {
-                        inputMethodManager.hideSoftInputFromWindow(txt_ingredient.getWindowToken(), 0);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Please, Insert your ingredient", Toast.LENGTH_SHORT).show();
-                }
+        // Add Button Logic
+        btn_ingredient.setOnClickListener(v -> {
+            String input = txt_ingredient.getText().toString().trim();
+            if (!input.isEmpty()) {
+                ingredientList.add(input);
+                txt_ingredient.setText("");
+                adapter.notifyDataSetChanged();
+                if (imm != null) imm.hideSoftInputFromWindow(txt_ingredient.getWindowToken(), 0);
+            } else {
+                Toast.makeText(getContext(), "Please enter an ingredient", Toast.LENGTH_SHORT).show();
             }
         });
 
-        list_ingredient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                // Remove item and notify adapter instead of re-setting it
-                ingredientList.remove(position);
-                adapter.notifyDataSetChanged();
-            }
+
+        // Delete Item Logic
+        list_ingredient.setOnItemClickListener((parent, v, position, id) -> {
+            ingredientList.remove(position);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getContext(), "Ingredient removed", Toast.LENGTH_SHORT).show();
         });
 
         return view;

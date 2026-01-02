@@ -3,13 +3,13 @@ package com.hanson.android.recipe;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
-// CORRECT ANDROIDX IMPORTS
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -22,34 +22,44 @@ public class TempSearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp_search_result);
 
-        // Setup ActionBar for consistency with other activities
+        // 1. Action Bar Styling
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Test Search Results");
+            actionBar.setTitle("Search Recipes");
         }
 
-        // Test dummy data
+        // 2. Dummy Data (Replace with your actual search logic/DB query)
+        generateDummyData();
+
+        // 3. Button Implementation
+        MaterialButton btnSend = findViewById(R.id.btn_sendRecipeList);
+        btnSend.setOnClickListener(v -> {
+            if (sendRecipeList.isEmpty()) {
+                Toast.makeText(this, "No recipes found matching these ingredients!", Toast.LENGTH_SHORT).show();
+            } else {
+                navigateToResults();
+            }
+        });
+    }
+
+    private void generateDummyData() {
+        sendRecipeList.clear();
         sendRecipeList.add(1);
         sendRecipeList.add(2);
         sendRecipeList.add(3);
         sendRecipeList.add(4);
+    }
 
-        Button send = findViewById(R.id.btn_sendRecipeList);
+    private void navigateToResults() {
+        Intent intent = new Intent(TempSearchResultActivity.this, RecipeListActivity.class);
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to RecipeListActivity
-                Intent intent = new Intent(TempSearchResultActivity.this, RecipeListActivity.class);
+        // Pass title and list of IDs to the list displayer
+        intent.putExtra("title", "Matching Results");
+        intent.putIntegerArrayListExtra("list", sendRecipeList);
 
-                // Note: Title fixed to "Matching"
-                intent.putExtra("title", "Matching 3 ingredients");
-                intent.putIntegerArrayListExtra("list", sendRecipeList);
-
-                startActivity(intent);
-            }
-        });
+        startActivity(intent);
+        // Optional: finish(); if you don't want the user to come back to this temp screen
     }
 
     @Override

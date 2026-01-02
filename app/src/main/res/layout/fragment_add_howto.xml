@@ -5,61 +5,192 @@
     android:id="@+id/root_Add_howto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/admin_red_gradient_bg"
     tools:context="com.hanson.android.recipe.AddHowtoFragment">
 
+    <!-- STEP 3 Badge -->
     <TextView
         android:id="@+id/txt_Add_step2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorFont1"
+        android:background="@drawable/gradient_border_card"
         android:gravity="center"
-        android:paddingBottom="2dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="2dp"
-        android:text="STEP 3"
+        android:elevation="8dp"
+        android:letterSpacing="0.05"
+        android:paddingHorizontal="20dp"
         android:textColor="@android:color/white"
-        android:textSize="17sp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:paddingVertical="10dp"
+        android:text="STEP 3️⃣"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView9"
+    <!-- Title Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/title_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Preparation Steps"
-        android:textStyle="bold"
-        android:textColor="@color/colorAccent_deepBlue"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:cardBackgroundColor="@color/glass_white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/txt_ADD_Howto"
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.02"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="12dp"
+            android:text="👨‍🍳 Preparation Steps"
+            android:textColor="@color/deep_blue_neon"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Steps Counter Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/counter_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        app:cardBackgroundColor="@color/glass_white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📊 Steps added: "
+                android:textColor="@color/deep_blue_neon"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_step_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/counter_badge"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Main Text Input Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/text_input_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/editborder"
-        android:ems="10"
-        android:gravity="top"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        app:cardBackgroundColor="@color/glass_white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttons_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/counter_card">
 
-        android:hint="Describe the cooking process step-by-step. \nExample: \n1. Boil water in a large pot. \n2. Add salt and pasta..."
+        <EditText
+            android:id="@+id/txt_ADD_Howto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/nav_drawer_gradient"
+            android:gravity="top"
+            android:hint="✨ Describe the cooking process step-by-step.\n\n📋 Example Format:\n\n1️⃣ Boil water in a large pot.\n2️⃣ Add salt and pasta...\n3️⃣ Cook for 8-10 minutes.\n4️⃣ Drain and serve hot.\n\n💡 Tips:\n• Start each step with a number\n• Be specific with measurements\n• Include cooking times\n• Mention doneness indicators"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="4dp"
+            android:maxLength="1000"
+            android:overScrollMode="always"
+            android:padding="20dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:textColor="@color/dark_gray"
+            android:textColorHint="@color/medium_gray"
+            android:textSize="15sp" />
+    </androidx.cardview.widget.CardView>
 
-        android:inputType="textMultiLine"
-        android:maxLength="450"
-        android:padding="12dp"
-
-        android:overScrollMode="always"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical"
-
+    <!-- Action Buttons Bar -->
+    <LinearLayout
+        android:id="@+id/buttons_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/gradient_border_card"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btn_format_steps"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/image_gradient_overlay"
+            android:elevation="4dp"
+            android:text="🔢 Auto-Format"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_clear_steps"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/red_gradient_header"
+            android:elevation="4dp"
+            android:text="🗑️ Clear"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_save_steps"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/red_gradient_toolbar"
+            android:elevation="4dp"
+            android:text="💾 Save Steps"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

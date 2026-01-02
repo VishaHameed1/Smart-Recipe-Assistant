@@ -40,8 +40,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".UserLoginActivity" android:screenOrientation="portrait" />
-        <activity android:name=".UserRegisterActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".Model.UserLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Model.UserRegisterActivity"
+            android:exported="false" />
         <activity android:name=".LoginActivity" android:screenOrientation="portrait" />
         <activity android:name=".SavedAiRecipesActivity" android:screenOrientation="portrait" />
         <activity android:name=".RecipeActivity" android:screenOrientation="portrait" />

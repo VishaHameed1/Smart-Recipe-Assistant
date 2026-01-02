@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Fire shape -->
+    <path
+        android:fillColor="#FF3300"
+        android:pathData="M12,21c4.42,0 8,-3.58 8,-8c0,-2.21 -1.79,-4 -4,-4c-0.45,0 -0.87,0.09 -1.28,0.24c0.36,-0.76 0.78,-1.72 0.78,-2.24c0,-2.21 -1.79,-4 -4,-4S7,4.79 7,7c0,0.52 0.42,1.48 0.78,2.24C7.37,9.09 6.95,9 6.5,9C4.29,9 2.5,10.79 2.5,13c0,4.42 3.58,8 8,8H12z" />
+
+    <!-- Circuit pattern -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M8,12h2v2H8zM14,12h2v2h-2zM11,9h2v2h-2zM11,15h2v2h-2z"
+        android:strokeWidth="0.5"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- AI binary -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,17h1v1h-1zM13,17h1v1h-1zM9,11h1v1H9zM14,11h1v1h-1z" />
+
+</vector>

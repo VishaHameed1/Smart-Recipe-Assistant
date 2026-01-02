@@ -1,22 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"> <ImageView
-    android:id="@+id/img_logo"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
-    android:layout_centerInParent="true"
-    android:src="@mipmap/ic_launcher" />
+    android:background="@drawable/splash_gradient_bg">
 
+    <!-- Animated Chef Hat -->
+    <ImageView
+        android:id="@+id/img_chef_hat"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_chef_hat_animated"
+        app:tint="@color/bright_yellow" />
+
+    <!-- App Logo/Icon -->
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_app_logo_splash"
+        app:tint="@color/red_primary" />
+
+    <!-- App Name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_chef_hat"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:letterSpacing="0.05"
+        android:shadowColor="@color/dark_red"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="👨‍🍳 Recipe Master"
+        android:textColor="@color/red_primary"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <!-- Tagline -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Chef Assistant"
-        android:textColor="#1C1C2A"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="12dp"
+        android:text="Cook Like a Pro Chef"
+        android:textColor="@color/dark_red"
+        android:textSize="18sp" />
+
+    <!-- Loading Indicator -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_loader"
+        android:layout_width="200dp"
+        android:layout_height="6dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:indeterminate="true"
+        app:indicatorColor="@color/bright_yellow"
+        app:trackColor="@color/red_primary" />
+
+    <!-- Version/Bottom Text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:text="v1.0 • Cook with Passion"
+        android:textColor="#FFB74D"
+        android:textSize="12sp" />
+
+    <!-- Animated Utensils -->
+    <ImageView
+        android:id="@+id/img_utensil_left"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:rotation="-15"
+        android:src="@drawable/ic_spoon"
+        app:tint="@color/bright_yellow" />
+
+    <ImageView
+        android:id="@+id/img_utensil_right"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:rotation="15"
+        android:src="@drawable/ic_knife"
+        app:tint="@color/red_primary" />
+
 </RelativeLayout>

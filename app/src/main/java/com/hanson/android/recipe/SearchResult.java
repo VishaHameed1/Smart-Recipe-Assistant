@@ -13,8 +13,9 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -42,10 +43,11 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
     private SpeechRecognizer speechRecognizer;
     private Intent speechIntent;
     private String[] aiSteps;
-    private int currentStepIndex = 0;
+    private int currentStepIndex = -1;
     private boolean isAiVoiceMode = false;
     private String currentAiResponse = "";
 
+    private TextView txtAiContent;
     private Button btnNextStep, btnPrevStep;
 
     @Override
@@ -56,11 +58,14 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
         boolean isAi = intent.getBooleanExtra("is_ai", false);
         String aiResponse = intent.getStringExtra("ai_response");
 
+        // Logic check: AI vs Normal UI
         if (isAi && aiResponse != null) {
             this.currentAiResponse = aiResponse;
+            setContentView(R.layout.activity_ai_display);
             setupAiUI(aiResponse);
             checkVoicePermission();
         } else {
+            setContentView(R.layout.activity_search_result);
             setupNormalUI(intent);
         }
 
@@ -70,6 +75,10 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
             actionBar.setTitle(isAi ? "Gemini AI Recipe" : "Search Results");
         }
 
+        initSpeechEngines();
+    }
+
+    private void initSpeechEngines() {
         tts = new TextToSpeech(this, status -> {
             if (status != TextToSpeech.ERROR) {
                 tts.setLanguage(Locale.US);
@@ -83,145 +92,123 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
         speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     }
 
-    private void checkVoicePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
-        }
-    }
-
-    private void setupTTSListener() {
-        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String utteranceId) {}
-
-            @Override
-            public void onDone(String utteranceId) {
-                if (isAiVoiceMode) {
-                    runOnUiThread(() -> speechRecognizer.startListening(speechIntent));
-                }
-            }
-
-            @Override
-            public void onError(String utteranceId) {}
-        });
-    }
-
     private void setupAiUI(String response) {
-        setContentView(R.layout.activity_ai_display);
-        TextView tv = findViewById(R.id.txt_ai_content);
+        txtAiContent = findViewById(R.id.txt_ai_content);
         FloatingActionButton fabVoice = findViewById(R.id.fab_ai_voice);
         Button btnSave = findViewById(R.id.btn_save_ai);
-
         btnNextStep = findViewById(R.id.btn_next_step);
         btnPrevStep = findViewById(R.id.btn_prev_step);
 
-        // Splitting by lines for better step-by-step navigation
-        aiSteps = response.split("\n");
+        // Splitting by paragraphs for logical steps
+        aiSteps = response.split("\\n+");
 
-        if (tv != null) {
-            // Remove markdown symbols for better display
-            String cleanText = response.replace("**", "")
-                    .replace("* ", "• ")
-                    .replace("\n", "<br>");
-            tv.setText(Html.fromHtml(cleanText));
+        if (txtAiContent != null) {
+            txtAiContent.setText(Html.fromHtml(response.replace("**", "").replace("\n", "<br>"), Html.FROM_HTML_MODE_COMPACT));
         }
 
-        if (fabVoice != null) {
-            fabVoice.setOnClickListener(v -> {
-                if (!isAiVoiceMode) {
-                    isAiVoiceMode = true;
-                    currentStepIndex = 0;
-                    readNextAiStep();
-                } else {
-                    stopVoiceMode();
-                }
-            });
-        }
+        fabVoice.setOnClickListener(v -> toggleVoiceMode());
 
-        // Manual Navigation
-        if (btnNextStep != null) {
-            btnNextStep.setOnClickListener(v -> {
-                if (currentStepIndex < aiSteps.length - 1) {
-                    currentStepIndex++;
-                    readNextAiStep();
-                }
-            });
-        }
+        btnNextStep.setOnClickListener(v -> moveNext());
+        btnPrevStep.setOnClickListener(v -> moveBack());
 
-        if (btnPrevStep != null) {
-            btnPrevStep.setOnClickListener(v -> {
-                if (currentStepIndex > 0) {
-                    currentStepIndex--;
-                    readNextAiStep();
-                }
-            });
-        }
+        btnSave.setOnClickListener(v -> {
+            String title = (aiSteps.length > 0) ? aiSteps[0].replaceAll("[^a-zA-Z0-9]", "_") : "AI_Recipe";
+            saveRecipeToFile(title, currentAiResponse);
+        });
+    }
 
-        // Updated Save Logic with Dish Name
-        if (btnSave != null) {
-            btnSave.setOnClickListener(v -> {
-                String fileName = "AI_Recipe_" + System.currentTimeMillis();
-
-                if (aiSteps != null && aiSteps.length > 0) {
-                    // Extract first line as filename
-                    String firstLine = aiSteps[0].replaceAll("[^a-zA-Z0-9\\s]", "").trim();
-                    if (!firstLine.isEmpty()) {
-                        fileName = firstLine.replaceAll("\\s+", "_"); // Underscore for storage safety
-                        if (fileName.length() > 40) fileName = fileName.substring(0, 40);
-                    }
-                }
-                saveRecipeToFile(fileName, currentAiResponse);
-            });
+    private void toggleVoiceMode() {
+        if (!isAiVoiceMode) {
+            isAiVoiceMode = true;
+            currentStepIndex = 0;
+            speakStep();
+        } else {
+            stopVoiceMode();
         }
     }
 
-    private void readNextAiStep() {
-        if (aiSteps != null && currentStepIndex < aiSteps.length) {
-            String stepText = aiSteps[currentStepIndex].trim();
-            // Skip headers or empty lines
-            if (stepText.length() < 3) {
-                currentStepIndex++;
-                readNextAiStep();
+    private void speakStep() {
+        if (aiSteps != null && currentStepIndex >= 0 && currentStepIndex < aiSteps.length) {
+            String step = aiSteps[currentStepIndex].trim();
+            if (step.length() < 3) { // Skip short lines
+                moveNext();
                 return;
             }
 
-            Toast.makeText(this, "Reading Step " + (currentStepIndex + 1), Toast.LENGTH_SHORT).show();
-            Bundle params = new Bundle();
-            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "AiStepID");
+            highlightStep(step);
 
-            // Clean markdown before speaking
-            String speakableText = stepText.replace("**", "").replace("*", "");
-            tts.speak(speakableText, TextToSpeech.QUEUE_FLUSH, params, "AiStepID");
+            Bundle params = new Bundle();
+            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "StepID");
+            tts.speak(step.replace("*", ""), TextToSpeech.QUEUE_FLUSH, params, "StepID");
+        }
+    }
+
+    private void highlightStep(String stepText) {
+        String fullText = txtAiContent.getText().toString();
+        SpannableString spannable = new SpannableString(fullText);
+        int start = fullText.indexOf(stepText);
+        if (start != -1) {
+            spannable.setSpan(new BackgroundColorSpan(0xFFFFF176), start, start + stepText.length(), 0);
+            txtAiContent.setText(spannable);
+        }
+    }
+
+    private void moveNext() {
+        if (currentStepIndex < aiSteps.length - 1) {
+            currentStepIndex++;
+            speakStep();
+        } else {
+            stopVoiceMode();
+            Toast.makeText(this, "Recipe Finished!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveBack() {
+        if (currentStepIndex > 0) {
+            currentStepIndex--;
+            speakStep();
         }
     }
 
     private void stopVoiceMode() {
         isAiVoiceMode = false;
-        if (tts != null) tts.stop();
-        if (speechRecognizer != null) speechRecognizer.stopListening();
-        Toast.makeText(this, "Voice Mode Off", Toast.LENGTH_SHORT).show();
+        tts.stop();
+        speechRecognizer.stopListening();
+        txtAiContent.setText(Html.fromHtml(currentAiResponse.replace("**", "").replace("\n", "<br>"), Html.FROM_HTML_MODE_COMPACT));
+        Toast.makeText(this, "Voice Control Off", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onResults(Bundle results) {
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         if (matches != null && isAiVoiceMode) {
-            String command = matches.get(0).toLowerCase();
-            if (command.contains("next") || command.contains("agla") || command.contains("shuru")) {
-                currentStepIndex++;
-                readNextAiStep();
-            } else if (command.contains("back") || command.contains("piche") || command.contains("previous")) {
-                if (currentStepIndex > 0) {
-                    currentStepIndex--;
-                    readNextAiStep();
-                }
-            } else if (command.contains("stop") || command.contains("band")) {
-                stopVoiceMode();
-            } else {
-                // Not recognized, listen again
-                speechRecognizer.startListening(speechIntent);
-            }
+            String cmd = matches.get(0).toLowerCase();
+            if (cmd.contains("next") || cmd.contains("agla") || cmd.contains("aage")) moveNext();
+            else if (cmd.contains("back") || cmd.contains("piche") || cmd.contains("previous"))
+                moveBack();
+            else if (cmd.contains("stop") || cmd.contains("band")) stopVoiceMode();
+            else if (cmd.contains("repeat") || cmd.contains("dobara")) speakStep();
+            else speechRecognizer.startListening(speechIntent); // Listen again if no match
         }
+    }
+
+    private void setupTTSListener() {
+        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                if (isAiVoiceMode) {
+                    new Handler(Looper.getMainLooper()).post(() -> speechRecognizer.startListening(speechIntent));
+                }
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+            }
+        });
     }
 
     @Override
@@ -229,57 +216,53 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
         if (isAiVoiceMode) {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if(isAiVoiceMode) speechRecognizer.startListening(speechIntent);
-            }, 1000);
+            }, 1000); // Restart listening on error
         }
     }
 
     private void saveRecipeToFile(String fileName, String content) {
-        try {
-            FileOutputStream fos = openFileOutput(fileName + ".txt", Context.MODE_PRIVATE);
+        try (FileOutputStream fos = openFileOutput(fileName + ".txt", Context.MODE_PRIVATE)) {
             fos.write(content.getBytes());
-            fos.close();
-            Toast.makeText(this, "Recipe saved as " + fileName.replace("_", " "), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Saved: " + fileName.replace("_", " "), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Save Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error Saving File", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Required overrides
-    @Override public void onReadyForSpeech(Bundle params) {}
-    @Override public void onBeginningOfSpeech() {}
-    @Override public void onRmsChanged(float rmsdB) {}
-    @Override public void onBufferReceived(byte[] buffer) {}
-    @Override public void onEndOfSpeech() {}
-    @Override public void onPartialResults(Bundle partialResults) {}
-    @Override public void onEvent(int eventType, Bundle params) {}
-
     private void setupNormalUI(Intent intent) {
-        setContentView(R.layout.activity_search_result);
         final ArrayList<Integer> receiveRecipeList = intent.getIntegerArrayListExtra("idrecipes");
         final ArrayList<Integer> receiveMatches = intent.getIntegerArrayListExtra("matches");
         final ArrayList<Integer> receiveMatchesNoDuplicates = intent.getIntegerArrayListExtra("matchesNoDuplicates");
+
         this.savedReceiveMatches = receiveMatches;
         this.savedRecipeList = receiveRecipeList;
+
         if (receiveMatchesNoDuplicates != null) {
             GridView gridView = findViewById(R.id.idGridSearchResult);
-            if (gridView != null) {
-                ArrayList<String> displayStrings = createString(receiveMatchesNoDuplicates);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.searchresult_custom, displayStrings);
-                gridView.setAdapter(adapter);
-                gridView.setOnItemClickListener((parent, view, position, id) -> {
-                    Intent nextIntent = new Intent(SearchResult.this, RecipeListActivity.class);
-                    int matchValue = receiveMatchesNoDuplicates.get(position);
-                    nextIntent.putExtra("title", "Matching: " + matchValue + " ingredients");
-                    ArrayList<Integer> positions = findPositionIdResearch(matchValue);
-                    ArrayList<Integer> idsToSend = new ArrayList<>();
-                    if (savedRecipeList != null) {
-                        for (int posIndex : positions) idsToSend.add(savedRecipeList.get(posIndex));
-                    }
-                    nextIntent.putIntegerArrayListExtra("list", idsToSend);
-                    startActivity(nextIntent);
-                });
-            }
+            ArrayList<String> displayStrings = createString(receiveMatchesNoDuplicates);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.searchresult_custom, displayStrings);
+            gridView.setAdapter(adapter);
+
+            gridView.setOnItemClickListener((parent, view, position, id) -> {
+                Intent nextIntent = new Intent(SearchResult.this, RecipeListActivity.class);
+                int matchValue = receiveMatchesNoDuplicates.get(position);
+                nextIntent.putExtra("title", "Matching: " + matchValue + " ingredients");
+
+                ArrayList<Integer> positions = findPositionIdResearch(matchValue);
+                ArrayList<Integer> idsToSend = new ArrayList<>();
+                if (savedRecipeList != null) {
+                    for (int posIndex : positions) idsToSend.add(savedRecipeList.get(posIndex));
+                }
+                nextIntent.putIntegerArrayListExtra("list", idsToSend);
+                startActivity(nextIntent);
+            });
+        }
+    }
+
+    // --- Auxiliary Methods ---
+    private void checkVoicePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
     }
 
@@ -313,5 +296,33 @@ public class SearchResult extends AppCompatActivity implements RecognitionListen
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults) {
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params) {
     }
 }

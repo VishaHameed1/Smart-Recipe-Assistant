@@ -1,8 +1,10 @@
 package com.hanson.android.recipe;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,20 +13,25 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button; // Added
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout; // Added
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.hanson.android.recipe.Helper.DBHelper;
 import com.hanson.android.recipe.Helper.ImageHelper;
 import com.hanson.android.recipe.Model.RecipeItem;
@@ -37,6 +44,7 @@ public class RecipeActivity extends AppCompatActivity implements RecognitionList
     private final ImageHelper imageHelper = new ImageHelper();
     private RecipeItem recipeItem;
     private ScrollView scrollView;
+    private TextView txtHowTo;
 
     private TextToSpeech tts;
     private SpeechRecognizer speechRecognizer;
@@ -45,216 +53,189 @@ public class RecipeActivity extends AppCompatActivity implements RecognitionList
     private int currentStepIndex = 0;
     private boolean isCookingMode = false;
 
-    // Manual Buttons
     private LinearLayout voiceControlPanel;
     private Button btnNextStep, btnPrevStep;
+    private ExtendedFloatingActionButton btnStartCooking;
+    private TextView statusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        final DBHelper dbHelper = new DBHelper(this, "Recipes.db", null, 1);
+        DBHelper dbHelper = new DBHelper(this, "Recipes.db", null, 1);
 
+        // Toolbar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        SharedPreferences pref = getSharedPreferences("Login", Activity.MODE_PRIVATE);
-        final String userID = pref.getString("userID", "");
+        initViews();
 
-        // Bind Views
-        scrollView = findViewById(R.id.recipe_scroll_view);
-        TextView recipeName = findViewById(R.id.txt_recipeName);
-        TextView author = findViewById(R.id.txt_recipeAuthor);
-        TextView uploadDate = findViewById(R.id.txt_recipeUploaddate);
-        TextView country = findViewById(R.id.txt_recipeCountry);
-        TextView ingredients = findViewById(R.id.txt_recipeIngredients);
-        TextView description = findViewById(R.id.txt_recipeDescription);
-        TextView howto = findViewById(R.id.txt_recipeHowto);
-        ImageView mainImg = findViewById(R.id.img_recipeMainImg);
-        CheckBox like = findViewById(R.id.chk_recipeLike);
-        FloatingActionButton btnVoice = findViewById(R.id.btn_start_cooking);
-
-        // Bind Manual Buttons from XML
-        voiceControlPanel = findViewById(R.id.voice_control_panel);
-        btnNextStep = findViewById(R.id.btn_next_step);
-        btnPrevStep = findViewById(R.id.btn_prev_step);
-
-        // Get intent data
-        Intent intent = getIntent();
-        String name = intent.getStringExtra("recipe");
+        String name = getIntent().getStringExtra("recipe");
         recipeItem = dbHelper.recipes_SelectByName(name);
 
         if (recipeItem != null) {
-            mainImg.setImageBitmap(imageHelper.getBitmapFromByteArray(recipeItem.get_mainImg()));
-            recipeName.setText(recipeItem.get_recipeName());
-            author.setText(recipeItem.get_author());
-            uploadDate.setText(recipeItem.get_uploadDate());
-            country.setText(recipeItem.get_category());
-            description.setText(recipeItem.get_Description());
-            howto.setText(recipeItem.get_howTo());
-
-            ArrayList<String> ingredientList = dbHelper.ingredients_SelectByRecipeId(recipeItem.get_id());
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < ingredientList.size(); i++) {
-                builder.append(ingredientList.get(i));
-                if (i != (ingredientList.size() - 1)) builder.append(" / ");
-            }
-            ingredients.setText(builder.toString());
-
-            if (!userID.isEmpty()) {
-                like.setChecked(dbHelper.like_GetLikeYNByUserId(userID, recipeItem.get_id()));
-            }
+            if (actionBar != null) actionBar.setTitle(recipeItem.get_recipeName());
+            populateData(dbHelper);
         }
 
-        // Initialize TTS
-        tts = new TextToSpeech(this, status -> {
-            if (status != TextToSpeech.ERROR) {
-                tts.setLanguage(Locale.US);
-                setupTTSProgressListener();
-            }
-        });
-
-        // Initialize Speech Recognizer
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        speechRecognizer.setRecognitionListener(this);
-        speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-        btnVoice.setOnClickListener(v -> {
-            if (!isCookingMode) {
-                startCookingMode();
-            } else {
-                stopCookingMode();
-            }
-        });
-
-        // Manual Button Listeners
-        btnNextStep.setOnClickListener(v -> {
-            if (currentStepIndex < recipeSteps.length - 1) {
-                currentStepIndex++;
-                readStepAndListen();
-            } else {
-                Toast.makeText(this, "Last Step!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnPrevStep.setOnClickListener(v -> {
-            if (currentStepIndex > 0) {
-                currentStepIndex--;
-                readStepAndListen();
-            }
-        });
-
-        like.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (userID.isEmpty()) {
-                startActivity(new Intent(this, LoginActivity.class));
-                buttonView.setChecked(false);
-            } else {
-                if (isChecked) dbHelper.recipes_AddLike(userID, recipeItem.get_id());
-                else dbHelper.recipes_MinusLike(userID, recipeItem.get_id());
-            }
-        });
+        initVoiceEngines();
+        checkPermissions();
     }
 
-    private void setupTTSProgressListener() {
-        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            @Override
-            public void onStart(String utteranceId) {}
-
-            @Override
-            public void onDone(String utteranceId) {
-                // Mic starts only after TTS finishes speaking
-                if (isCookingMode) {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        speechRecognizer.startListening(speechIntent);
-                    });
-                }
-            }
-
-            @Override
-            public void onError(String utteranceId) {}
-        });
+    private void initViews() {
+        scrollView = findViewById(R.id.recipe_scroll_view);
+        txtHowTo = findViewById(R.id.txt_recipeHowto);
+        voiceControlPanel = findViewById(R.id.voice_control_panel);
+        btnNextStep = findViewById(R.id.btn_next_step);
+        btnPrevStep = findViewById(R.id.btn_prev_step);
+        btnStartCooking = findViewById(R.id.btn_start_cooking);
+        statusText = findViewById(R.id.tv_voice_status); // Add this in XML for visual feedback
     }
 
-    private void startCookingMode() {
-        if (recipeItem != null && recipeItem.get_howTo() != null) {
-            recipeSteps = recipeItem.get_howTo().split("\\.");
+    private void populateData(DBHelper dbHelper) {
+        SharedPreferences pref = getSharedPreferences("UserLogin", MODE_PRIVATE);
+        String userID = pref.getString("userID", "");
+
+        TextView recipeName = findViewById(R.id.txt_recipeName);
+        TextView author = findViewById(R.id.txt_recipeAuthor);
+        ImageView mainImg = findViewById(R.id.img_recipeMainImg);
+        TextView ingredientsText = findViewById(R.id.txt_recipeIngredients);
+        CheckBox chkLike = findViewById(R.id.chk_recipeLike);
+
+        recipeName.setText(recipeItem.get_recipeName());
+        author.setText("Chef: " + recipeItem.get_author());
+        mainImg.setImageBitmap(imageHelper.getBitmapFromByteArray(recipeItem.get_mainImg()));
+        txtHowTo.setText(recipeItem.get_howTo());
+
+        // Ingredients formatting
+        ArrayList<String> ings = dbHelper.ingredients_SelectByRecipeId(recipeItem.get_id());
+        StringBuilder sb = new StringBuilder();
+        for (String s : ings) sb.append("• ").append(s).append("\n");
+        ingredientsText.setText(sb.toString().trim());
+
+        // Like status
+        if (!userID.isEmpty()) {
+            chkLike.setChecked(dbHelper.like_GetLikeYNByUserId(userID, recipeItem.get_id()));
+        }
+
+        btnStartCooking.setOnClickListener(v -> toggleCookingMode());
+        btnNextStep.setOnClickListener(v -> moveStep(1));
+        btnPrevStep.setOnClickListener(v -> moveStep(-1));
+    }
+
+    private void toggleCookingMode() {
+        if (!isCookingMode) {
+            recipeSteps = recipeItem.get_howTo().split("\\r?\\n|\\.");
             currentStepIndex = 0;
             isCookingMode = true;
-
-            // Show bottom manual controls
-            if (voiceControlPanel != null) voiceControlPanel.setVisibility(View.VISIBLE);
-
-            Toast.makeText(this, "Voice Mode Started! Say 'Next' or use buttons.", Toast.LENGTH_SHORT).show();
+            voiceControlPanel.setVisibility(View.VISIBLE);
+            btnStartCooking.setText("Stop Cooking");
+            btnStartCooking.setIcon(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_close_clear_cancel));
             readStepAndListen();
-        }
-    }
-
-    private void readStepAndListen() {
-        if (isCookingMode && recipeSteps != null && currentStepIndex < recipeSteps.length) {
-            String stepText = recipeSteps[currentStepIndex].trim();
-            if (stepText.length() < 2) {
-                currentStepIndex++;
-                readStepAndListen();
-                return;
-            }
-
-            // UI Feedback: Toast for current step number
-            Toast.makeText(this, "Step " + (currentStepIndex + 1), Toast.LENGTH_SHORT).show();
-
-            // Auto-Scroll to bottom to show instructions
-            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
-
-            Bundle params = new Bundle();
-            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "RecipeStepID");
-            tts.speak("Step " + (currentStepIndex + 1) + ": " + stepText, TextToSpeech.QUEUE_FLUSH, params, "RecipeStepID");
-        } else if (isCookingMode) {
-            tts.speak("Recipe completed. Enjoy your meal!", TextToSpeech.QUEUE_FLUSH, null, "FinishID");
+        } else {
             stopCookingMode();
         }
     }
 
-    private void stopCookingMode() {
-        isCookingMode = false;
-        if (tts != null) tts.stop();
-        if (speechRecognizer != null) speechRecognizer.stopListening();
-        if (voiceControlPanel != null) voiceControlPanel.setVisibility(View.GONE);
-        Toast.makeText(this, "Voice Mode Stopped", Toast.LENGTH_SHORT).show();
+    private void readStepAndListen() {
+        if (!isCookingMode || recipeSteps == null || currentStepIndex >= recipeSteps.length) return;
+
+        String step = recipeSteps[currentStepIndex].trim();
+        if (step.isEmpty()) {
+            moveStep(1);
+            return;
+        }
+
+        highlightStep(step);
+
+        Bundle params = new Bundle();
+        params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "STEP_SPEECH");
+        tts.speak("Step " + (currentStepIndex + 1) + ": " + step, TextToSpeech.QUEUE_FLUSH, params, "STEP_SPEECH");
+    }
+
+    private void highlightStep(String stepContent) {
+        String fullText = txtHowTo.getText().toString();
+        int startPos = fullText.indexOf(stepContent);
+        if (startPos != -1) {
+            SpannableString spannable = new SpannableString(fullText);
+            spannable.setSpan(new BackgroundColorSpan(Color.YELLOW), startPos, startPos + stepContent.length(), 0);
+            txtHowTo.setText(spannable);
+
+            // Auto-scroll to the step
+            int y = txtHowTo.getLayout().getLineTop(txtHowTo.getLayout().getLineForOffset(startPos));
+            scrollView.smoothScrollTo(0, txtHowTo.getTop() + y - 100);
+        }
+    }
+
+    private void moveStep(int direction) {
+        currentStepIndex += direction;
+        if (currentStepIndex >= 0 && currentStepIndex < recipeSteps.length) {
+            readStepAndListen();
+        } else if (currentStepIndex >= recipeSteps.length) {
+            tts.speak("Cooking complete! Enjoy your meal.", TextToSpeech.QUEUE_FLUSH, null, null);
+            stopCookingMode();
+        } else {
+            currentStepIndex = 0;
+        }
+    }
+
+    private void initVoiceEngines() {
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) tts.setLanguage(Locale.getDefault());
+        });
+
+        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                runOnUiThread(() -> {
+                    statusText.setText("Listening...");
+                    speechRecognizer.startListening(speechIntent);
+                });
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+            }
+        });
+
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        speechRecognizer.setRecognitionListener(this);
+        speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     }
 
     @Override
     public void onResults(Bundle results) {
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        if (matches != null && isCookingMode) {
-            String command = matches.get(0).toLowerCase();
-            if (command.contains("next") || command.contains("agla")) {
-                currentStepIndex++;
-                readStepAndListen();
-            } else if (command.contains("back") || command.contains("piche") || command.contains("previous")) {
-                if (currentStepIndex > 0) {
-                    currentStepIndex--;
-                    readStepAndListen();
-                }
-            } else if (command.contains("repeat") || command.contains("dobara")) {
-                readStepAndListen();
-            } else if (command.contains("stop") || command.contains("exit")) {
-                stopCookingMode();
-            } else {
-                // Not a valid command? Keep listening.
-                speechRecognizer.startListening(speechIntent);
-            }
+        if (matches != null) {
+            String cmd = matches.get(0).toLowerCase();
+            if (cmd.contains("next") || cmd.contains("agla")) moveStep(1);
+            else if (cmd.contains("back") || cmd.contains("piche")) moveStep(-1);
+            else if (cmd.contains("repeat") || cmd.contains("dobara")) readStepAndListen();
+            else if (cmd.contains("stop")) stopCookingMode();
+            else speechRecognizer.startListening(speechIntent);
         }
     }
 
-    @Override
-    public void onError(int error) {
-        if (isCookingMode) {
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                if(isCookingMode) speechRecognizer.startListening(speechIntent);
-            }, 1500);
+    private void stopCookingMode() {
+        isCookingMode = false;
+        tts.stop();
+        speechRecognizer.stopListening();
+        voiceControlPanel.setVisibility(View.GONE);
+        btnStartCooking.setText("Start Cooking");
+        txtHowTo.setText(recipeItem.get_howTo()); // clear highlight
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
     }
 
@@ -265,18 +246,27 @@ public class RecipeActivity extends AppCompatActivity implements RecognitionList
         super.onDestroy();
     }
 
-    // Required Callbacks
-    @Override public void onReadyForSpeech(Bundle params) {}
+    @Override
+    public void onError(int error) {
+        if (isCookingMode) speechRecognizer.startListening(speechIntent);
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+        statusText.setText("Listening for 'Next'...");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) finish();
+        return true;
+    }
+
+    // Unused callbacks
     @Override public void onBeginningOfSpeech() {}
     @Override public void onRmsChanged(float rmsdB) {}
     @Override public void onBufferReceived(byte[] buffer) {}
     @Override public void onEndOfSpeech() {}
     @Override public void onPartialResults(Bundle partialResults) {}
     @Override public void onEvent(int eventType, Bundle params) {}
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) { finish(); return true; }
-        return super.onOptionsItemSelected(item);
-    }
 }

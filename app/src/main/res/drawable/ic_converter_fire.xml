@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Scale/balance -->
+    <path
+        android:fillColor="#FF6600"
+        android:pathData="M12,3L4,9v12h16V9L12,3zM18,19H6v-8.9l6,-4.58 6,4.58V19z" />
+
+    <!-- Conversion arrows -->
+    <path
+        android:fillColor="#FF3300"
+        android:pathData="M10,10h4v4h-4zM16,14l2,-2 -2,-2v4zM8,10l-2,2 2,2v-4z" />
+
+    <!-- Measurement lines -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M9,13h2v1H9zM13,13h2v1h-2zM11,15h2v1h-2z" />
+
+</vector>

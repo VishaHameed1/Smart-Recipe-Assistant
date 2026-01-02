@@ -1,60 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
-    <group android:id="@+id/group_home"
-        android:checkableBehavior="single">
+    <!-- Header Section -->
+    <item
+        android:id="@+id/nav_header"
+        android:enabled="false"
+        android:title="">
+
+        <menu>
+            <item
+                android:id="@+id/nav_header_profile"
+                android:icon="@drawable/ic_fire_ai"
+                android:title="🔥 AI Chef Assistant"
+                app:showAsAction="always" />
+        </menu>
+    </item>
+
+    <!-- Main Navigation Group -->
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
-    </group>
+            android:title="🏠 Home" />
 
-    <group android:id="@+id/group_navi"
-        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_category"
+            android:id="@+id/nav_my_recipes"
+            android:icon="@drawable/ic_copy_white"
+            android:title="📖 My Recipes" />
+
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_star"
+            android:title="⭐ Favorites" />
+
+        <item
+            android:id="@+id/nav_categories"
             android:icon="@drawable/ic_category"
-            android:title="Category" />
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/ic_search"
-            android:title="Search Recipes" />
+            android:title="📂 Categories" />
 
         <item
-            android:id="@+id/nav_saved_ai"
-            android:icon="@android:drawable/btn_star_big_on"
-            android:title="My Saved AI Recipes"
-            android:visible="false" />
+            android:id="@+id/nav_shopping"
+            android:icon="@drawable/ic_cart_fire"
+            android:title="🛒 Shopping List" />
 
         <item
-            android:id="@+id/nav_add"
-            android:icon="@drawable/ic_addrecipe"
-            android:title="Add Recipe"
-            android:visible="false" />
+            android:id="@+id/nav_meal_plan"
+            android:icon="@drawable/ic_calendar_fire"
+            android:title="📅 Meal Planner" />
+
+        <item
+            android:id="@+id/nav_ai_assistant"
+            android:icon="@drawable/ic_fire_ai"
+            android:title="🤖 AI Recipe Assistant" />
     </group>
 
-    <group android:id="@+id/group_login"
-        android:checkableBehavior="single">
+    <!-- Tools & Settings Group -->
+    <item android:title="⚙️ Tools">
+        <menu>
+            <item
+                android:id="@+id/nav_timer"
+                android:icon="@drawable/ic_timer_fire"
+                android:title="⏱️ Cooking Timer" />
 
-        <item
-            android:id="@+id/nav_admin_login"
-            android:icon="@drawable/ic_login"
-            android:title="Admin Login (Visha)" />
+            <item
+                android:id="@+id/nav_converter"
+                android:icon="@drawable/ic_converter_fire"
+                android:title="⚖️ Unit Converter" />
 
-        <item
-            android:id="@+id/nav_user_login"
-            android:icon="@drawable/ic_login"
-            android:title="User Login / Register" />
+            <item
+                android:id="@+id/nav_tips"
+                android:icon="@drawable/ic_lightbulb_fire"
+                android:title="💡 Cooking Tips" />
+        </menu>
+    </item>
 
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="Logout"
-            android:visible="false" />
+    <!-- Account Section -->
+    <item android:title="👤 Account">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_profile_fire"
+                android:title="My Profile" />
 
-        <item
-            android:id="@+id/nav_info"
-            android:icon="@drawable/ic_info"
-            android:title="Information" />
-    </group>
+            <item
+                android:id="@+id/nav_achievements"
+                android:icon="@drawable/ic_trophy_fire"
+                android:title="🏆 Achievements" />
+
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings_fire"
+                android:title="Settings" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="🚪 Logout" />
+        </menu>
+    </item>
+
 </menu>

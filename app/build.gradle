@@ -50,7 +50,7 @@ dependencies {
     // Android ke liye niche wali library best hai:
     implementation "com.google.genai:google-genai:1.32.0"
 
-
+    implementation 'com.google.android.material:material:1.9.0' // or latest version
     // Guava for ListenableFuture support (Futures.addCallback use karne ke liye)
     implementation "com.google.guava:guava:31.1-android"
 

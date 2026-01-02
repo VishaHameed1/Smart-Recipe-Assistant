@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Timer base -->
+    <path
+        android:fillColor="#FF6600"
+        android:pathData="M15,1H9v2h6V1zM11,14h2v-6h-2v6zM12,4c-4.42,0 -8,3.58 -8,8s3.58,8 8,8 8,-3.58 8,-8 -3.58,-8 -8,-8zM12,20c-3.31,0 -6,-2.69 -6,-6s2.69,-6 6,-6 6,2.69 6,6 -2.69,6 -6,6z" />
+
+    <!-- Fire inside timer -->
+    <path
+        android:fillColor="#FF3300"
+        android:pathData="M12,8c-2.21,0 -4,1.79 -4,4s1.79,4 4,4 4,-1.79 4,-4 -1.79,-4 -4,-4z" />
+
+    <!-- Timer hands -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M13,12h-2v4h2v-4zM12,10l2,2h-4l2,-2z" />
+
+</vector>

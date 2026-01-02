@@ -5,85 +5,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bright_bg"
+    android:fillViewport="true"
     tools:context="com.hanson.android.recipe.HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="80dp">
 
-        <TextView
-            android:id="@+id/txt_DBresult"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:visibility="gone" />
+            android:layout_height="220dp">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/recipesideasmain" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/recipesideasmain" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/image_gradient_overlay" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                android:lineSpacingExtra="4dp"
+                android:text="👨‍🍳 Discover Amazing\nRecipes"
+                android:textColor="@color/bright_yellow"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/fab_home_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="-28dp"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_search" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:backgroundTint="@color/red_primary"
+            app:elevation="8dp"
+            app:srcCompat="@drawable/ic_search_red"
+            app:tint="@color/bright_yellow" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="New Recipes"
-            android:textColor="@color/colorFont1"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <include layout="@layout/section_header_new" />
 
-        <GridView
-            android:id="@+id/GridView_New"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="3"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="24dp"
-            android:text="Best Recipes"
-            android:textColor="@color/colorFont1"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp">
 
-        <GridView
-            android:id="@+id/GridView_Best"
+            <GridView
+                android:id="@+id/GridView_New"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:horizontalSpacing="8dp"
+                android:numColumns="2"
+                android:padding="8dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp" />
+        </androidx.cardview.widget.CardView>
+
+        <include layout="@layout/section_header_best" />
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="3"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            app:cardBackgroundColor="@color/bright_yellow_card"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp">
+
+            <GridView
+                android:id="@+id/GridView_Best"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:horizontalSpacing="8dp"
+                android:numColumns="2"
+                android:padding="8dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp" />
+        </androidx.cardview.widget.CardView>
+
+        <include layout="@layout/layout_home_stats" />
 
     </LinearLayout>
 </ScrollView>
